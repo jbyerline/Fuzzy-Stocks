@@ -21,7 +21,7 @@ class FuzzySet {
         }
     }
 
-    void CutAt(double x) {
+    void slice(double x) {
         if (slicing == false) {
             topValue = x;
             slicing = true;
@@ -33,7 +33,7 @@ class FuzzySet {
         }
     }
 
-    double Membership(double x) {
+    double membership(double x) {
         double result;
         if (x < min || x > max) {
             return 0.0;

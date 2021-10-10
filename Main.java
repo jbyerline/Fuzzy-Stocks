@@ -27,10 +27,9 @@ public class Main{
     }
 
     public static void main(String[] args) throws IOException {
-        PrintWriter out = new PrintWriter(new FileWriter("output.txt"), true);
-        double totalAssets = 0;
-        double dailyProfit = 0;
-        double totalProfit = 0;
+        PrintWriter out = new PrintWriter(new FileWriter("stocks.txt"), true);
+        double dailyProfit;
+        double totalProfit;
         double lastAmount = 10000;
         double currentAmount;
 
@@ -58,43 +57,43 @@ public class Main{
             //Setting rules...
             //The respective fuzzy sets are cut at the minimum point of their antecedents using the condition of and-ing
             //So the following lines translate to (if(mad is positive) and (price is low)) Then  buy_many
-            buy_many.CutAt(Math.min(mad_positive.Membership(madValue), price_very_low.Membership(priceValue)));
+            buy_many.slice(Math.min(mad_positive.membership(madValue), price_very_low.membership(priceValue)));
             //(if(mad is positive) and (price is very low)) Then  buy_few
-            buy_few.CutAt(Math.min(mad_positive.Membership(madValue), price_low.Membership(priceValue)));
+            buy_few.slice(Math.min(mad_positive.membership(madValue), price_low.membership(priceValue)));
             //(if(mad is positive) and (price is medium)) Then  DNT
-            do_not_trade.CutAt(Math.min(mad_positive.Membership(madValue), price_medium.Membership(priceValue)));
+            do_not_trade.slice(Math.min(mad_positive.membership(madValue), price_medium.membership(priceValue)));
             //(if(mad is positive) and (price is high)) Then  DNT
-            do_not_trade.CutAt(Math.min(mad_positive.Membership(madValue), price_high.Membership(priceValue)));
+            do_not_trade.slice(Math.min(mad_positive.membership(madValue), price_high.membership(priceValue)));
             //(if(mad is positive) and (price is very high)) Then  DNT
-            do_not_trade.CutAt(Math.min(mad_positive.Membership(madValue), price_very_high.Membership(priceValue)));
+            do_not_trade.slice(Math.min(mad_positive.membership(madValue), price_very_high.membership(priceValue)));
             //(if(mad is zero) and (price is very low)) Then  buy_many
-            buy_many.CutAt(Math.min(mad_zero.Membership(madValue), price_very_low.Membership(priceValue)));
+            buy_many.slice(Math.min(mad_zero.membership(madValue), price_very_low.membership(priceValue)));
             //(if(mad is zero) and (price is low)) Then  buy_few
-            buy_few.CutAt(Math.min(mad_zero.Membership(madValue), price_low.Membership(priceValue)));
+            buy_few.slice(Math.min(mad_zero.membership(madValue), price_low.membership(priceValue)));
             //(if(mad is zero) and (price is medium)) Then  DNT
-            do_not_trade.CutAt(Math.min(mad_zero.Membership(madValue), price_medium.Membership(priceValue)));
+            do_not_trade.slice(Math.min(mad_zero.membership(madValue), price_medium.membership(priceValue)));
             //(if(mad is zero) and (price is high)) Then  sell_few
-            sell_few.CutAt(Math.min(mad_zero.Membership(madValue), price_high.Membership(priceValue)));
+            sell_few.slice(Math.min(mad_zero.membership(madValue), price_high.membership(priceValue)));
             //(if(mad is zero) and (price is very high)) Then  sell_many
-            sell_many.CutAt(Math.min(mad_zero.Membership(madValue), price_very_high.Membership(priceValue)));
+            sell_many.slice(Math.min(mad_zero.membership(madValue), price_very_high.membership(priceValue)));
             //(if(mad is negative) and (price is very low)) Then  buy_many
-            buy_many.CutAt(Math.min(mad_negative.Membership(madValue), price_very_low.Membership(priceValue)));
+            buy_many.slice(Math.min(mad_negative.membership(madValue), price_very_low.membership(priceValue)));
             //(if(mad is negative) and (price is low)) Then  buy_few
-            buy_few.CutAt(Math.min(mad_negative.Membership(madValue), price_low.Membership(priceValue)));
+            buy_few.slice(Math.min(mad_negative.membership(madValue), price_low.membership(priceValue)));
             //(if(mad is negative) and (price is medium)) Then  sell_few
-            sell_few.CutAt(Math.min(mad_negative.Membership(madValue), price_medium.Membership(priceValue)));
+            sell_few.slice(Math.min(mad_negative.membership(madValue), price_medium.membership(priceValue)));
             //(if(mad is negative) and (price is high)) Then  sell_many
-            sell_many.CutAt(Math.min(mad_negative.Membership(madValue), price_high.Membership(priceValue)));
+            sell_many.slice(Math.min(mad_negative.membership(madValue), price_high.membership(priceValue)));
             //(if(mad is negative) and (price is very high)) Then  sell_many
-            sell_many.CutAt(Math.min(mad_negative.Membership(madValue), price_very_high.Membership(priceValue)));
+            sell_many.slice(Math.min(mad_negative.membership(madValue), price_very_high.membership(priceValue)));
 
             //Initializing the weights of the array according to the respective fuzzy sets
             for (int j = 0; j < 11; j++) {
-                weights[j] = weights[j] + sell_many.Membership((double) j / 10);
-                weights[j] = weights[j] + sell_few.Membership((double) j / 10);
-                weights[j] = weights[j] + do_not_trade.Membership((double) j / 10);
-                weights[j] = weights[j] + buy_few.Membership((double) j / 10);
-                weights[j] = weights[j] + buy_many.Membership((double) j / 10);
+                weights[j] = weights[j] + sell_many.membership((double) j / 10);
+                weights[j] = weights[j] + sell_few.membership((double) j / 10);
+                weights[j] = weights[j] + do_not_trade.membership((double) j / 10);
+                weights[j] = weights[j] + buy_few.membership((double) j / 10);
+                weights[j] = weights[j] + buy_many.membership((double) j / 10);
             }
 
             double cog = (weights[1] * 0.1) +

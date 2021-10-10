@@ -39,18 +39,15 @@ public class FuzzyUtils {
         }
     }
 
-    public static double round(double value, int places) {
-        if (places < 0){
-            throw new IllegalArgumentException();
-        }
+    public static double roundToDouble(double value, int places) {
         long factor = (long) Math.pow(10, places);
-        value = value * factor;
+        value *= factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
 
     static int defuzzifyShares(double x) {
-        return (int) ((round(x, 2) - 0.5) * 700);
+        return (int) ((roundToDouble(x, 2) - 0.5) * 700);
     }
 
 }
